@@ -13,17 +13,15 @@ async function fetchPokemonData() {
         const response = await fetch('https://pokeapi.co/api/v2/type');
         const data = await response.json();
 
-        // Extract type names and counts
         const labels = data.results.map(type => type.name);
         const counts = await Promise.all(
             data.results.map(async type => {
                 const typeResponse = await fetch(type.url);
                 const typeData = await typeResponse.json();
-                return typeData.pokemon.length; // Count of Pokémon for each type
+                return typeData.pokemon.length;
             })
         );
 
-        // Update chart data
         updateCharts(labels, counts);
     } catch (error) {
         console.error('Error fetching Pokémon data:', error);
@@ -38,7 +36,6 @@ function updateCharts(labels, counts) {
         '#7038F8', '#705848', '#EE99AC', '#68A090', '#705898'
     ];
 
-    // Doughnut Chart
     const ctx1 = document.getElementById('chart1').getContext('2d');
     new Chart(ctx1, {
         type: 'doughnut',
@@ -64,7 +61,6 @@ function updateCharts(labels, counts) {
         }
     });
 
-    // Bar Chart
     const ctx2 = document.getElementById('chart2').getContext('2d');
     new Chart(ctx2, {
         type: 'bar',
@@ -92,5 +88,4 @@ function updateCharts(labels, counts) {
     });
 }
 
-// Fetch data and initialize charts
 fetchPokemonData();
